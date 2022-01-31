@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handy Helper Dashboard</title>
+</head>
+<body>
+    <div id="main_content">
+        <div id="header">
+        <h1> Welcome {{current_user.first_name}}</h1>
+        <a href="logout">Logout</a>
+            <a href="add_job">Add a Job</a>
+        </div>
+        <div id="job_display">
+            <table>
+                <tr>
+                    <th>Job</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+                {% for one_job in all_jobs %}
+                {% if not one_job.belongs_to_user %}
+                <tr>
+                    <td>{{one_job.title}}</td>
+                    <td>{{one_job.location}}</td>
+                    <td><a href="view/{{one_job.id}}">View</a>
+                        <a href="claim_job/{{one_job.id}}">Add</a>
+                        {% if one_job.added_by == current_user %}
+                        <a href="edit/{{one_job.id}}">Edit</a> 
+                        <a href="delete/{{one_job.id}}">Cancel</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+        <div id="my_job_display">
+            <h1>My Jobs</h1>
+            {% for one_job in current_user.user_jobs.all %}
+            <p>{{one_job.title}}</p>
+            <a href="view/{{one_job.id}}">View</a>
+            <a href="delete/{{one_job.id}}">Done</a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
